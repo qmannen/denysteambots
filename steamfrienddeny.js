@@ -1,21 +1,11 @@
+const SteamUser = require('steam-user');
+const axios = require('axios');
+const cheerio = require('cheerio');
 const { username, password } = require('./config');
 
-console.log(username, password); // Test to see if it's working
-
-
-const SteamUser = require('steam-user');
-const SteamCommunity = require('steam-community');
-
 const client = new SteamUser();
-const community = new SteamCommunity();
 
-const username = "your_steam_username";
-const password = "your_steam_password";
-
-client.logOn({
-    accountName: username,
-    password: password
-});
+client.logOn({ accountName: username, password: password });
 
 client.on('loggedOn', () => {
     console.log(`Logged in as ${client.steamID.getSteam3RenderedID()}`);
@@ -24,29 +14,28 @@ client.on('loggedOn', () => {
 client.on('friendRelationship', async (steamID, relationship) => {
     if (relationship === SteamUser.EFriendRelationship.RequestRecipient) {
         console.log(`Received friend request from ${steamID.getSteamID64()}`);
-        
-        checkCommentsDisabled(steamID.getSteamID64()).then((isDisabled) => {
-            if (isDisabled) {
-                console.log(`Declining request from ${steamID.getSteamID64()} (comments disabled)`);
-                client.removeFriend(steamID);
-            } else {
-                console.log(`Friend request from ${steamID.getSteamID64()} is allowed (comments enabled)`);
-            }
-        }).catch((err) => {
-            console.log(`Error checking profile ${steamID.getSteamID64()}: ${err}`);
-        });
+
+        const isDisabled = await checkCommentsDisabled(steamID.getSteamID64());
+        if (isDisabled) {
+            console.log(`Declining request from ${steamID.getSteamID64()} (comments disabled)`);
+            client.removeFriend(steamID);
+        } else {
+            console.log(`Friend request from ${steamID.getSteamID64()} is allowed (comments enabled)`);
+        }
     }
 });
 
-function checkCommentsDisabled(steamID64) {
-    return new Promise((resolve, reject) => {
-        community.getSteamUser(steamID64, (err, user) => {
-            if (err) {
-                reject(err);
-            } else {
-                const commentsDisabled = user.comments === null; // `null` means comments are disabled
-                resolve(commentsDisabled);
-            }
-        });
-    });
+async function checkCommentsDisabled(steamID64) {
+    try {
+        const url = `https://steamcommunity.com/profiles/${steamID64}`;
+        const response = await axios.get(url);
+        const $ = cheerio.load(response.data);
+
+        // Check if the comment section is missing
+        const commentSection = $('#commentthread_Profile_RecentComments');
+        return commentSection.length === 0; // If the section is missing, comments are private
+    } catch (error) {
+        console.error(`Error checking profile ${steamID64}:`, error.message);
+        return false; // Default to false if there's an error
+    }
 }
