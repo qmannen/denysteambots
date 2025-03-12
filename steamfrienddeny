@@ -1,3 +1,8 @@
+const { username, password } = require('./config');
+
+console.log(username, password); // Test to see if it's working
+
+
 const SteamUser = require('steam-user');
 const SteamCommunity = require('steam-community');
 
