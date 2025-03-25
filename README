@@ -2,7 +2,9 @@ This script denies all incomming firnd requests from steamaccounts with private 
 Current dependencies: "Node.js" "Axios" "Cheerio" "steam-user" "steam-community"
 These dependencies are all "part of" Node.js and can be downloaded using the built-in command in node.js
 called "Node Package Manager":
+
 npm install axios cheerio steam-user steam-community
+
 All dependencies are now downloaded.
 Next step is: Rename #config.js to config.js (remove the # sign)
 Now inside the config.js remove all the # signs so it looks like this:
