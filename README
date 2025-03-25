@@ -3,6 +3,9 @@ Run the InstallDependencies script with:
 
 ./InstallDependencies
 
+The dependencies are as follows: Node.js, axios, cheerio, steam-user, steam-community
+
+
 Next step is: Rename #config.js to config.js (remove the # sign)
 Now inside the config.js remove all the # signs so it looks like this:
 
@@ -14,5 +17,7 @@ module.exports = {
 
 insert your name WITHIN the " " signs and password WITHIN the " "
 To run final script, in console type: node steamfrienddeny.js
+To run final script, in background type: node your_script.js &
+Then view the running process with: jobs -l
 
 It then will promt for your steam-guard code, just accepting the new login for the app will NOT work, code is required.
