@@ -3,3 +3,17 @@ Current dependencies: "Node.js" "Axios" "Cheerio" "steam-user" "steam-community"
 These dependencies are all "part of" Node.js and can be downloaded using the built-in command in node.js
 called "Node Package Manager":
 npm install axios cheerio steam-user steam-community
+All dependencies are now downloaded.
+Next step is: Rename #config.js to config.js (remove the # sign)
+Now inside the config.js remove all the # signs so it looks like this:
+
+module.exports = {
+    username: "ReplaceWithUsername",
+    password: "ReplaceWithPassword"
+};
+
+
+insert your name WITHIN the " " signs and password WITHIN the " "
+To run final script, in console type: node steamfrienddeny.js
+
+It then will promt for your steam-guard code, just accepting the new login for the app will NOT work, code is required.
