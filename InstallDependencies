@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "Installing npm packages: axios, cheerio, steam-user, steam-community..."
+apt install -y nodejs
+
+npm install axios cheerio steam-user steam-community
+
+echo "Installation complete."
